@@ -1,0 +1,7 @@
+cron:
+- description: start rss feed updates
+  url: /cron/start_update/
+  schedule: every 1 hours
+- description: deletes failed feeds
+  url: /cron/delete_failed/
+  schedule: every 24 hours

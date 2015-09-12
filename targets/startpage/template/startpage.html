@@ -1,0 +1,171 @@
+{{define "content"}}
+<nav><ul>
+	<li class="p-intro"><a href="#intro">Kaffeebot</a></li>
+	<li class="p-why"><a href="#why">Why</a></li>
+	<li class="p-details"><a href="#details">Import feed</a></li>
+</ul></nav>
+
+<div id="intro" class="section p-intro">
+	<div class="container center">
+		<h3 class="text-purple"><em>cool, a way to import data into <a style="color:inherit;" href="https://kaffeeshare.appspot.com/">kaffeeshare</a></em></h3>
+
+		<p><span class="fa-stack subtlecircle" style="font-size:100px; background:rgba(255,166,0,0.1)">
+			<i class="fa fa-circle fa-stack-2x text-white"></i>
+			<i class="fa fa-rss fa-stack-1x text-orange"></i>
+		</span>
+		<span class="fa-stack subtlecircle" style="font-size:100px; background:rgba(255,166,0,0.1)">
+			<i class="fa fa-circle fa-stack-2x text-white"></i>
+			<i class="fa fa-code-fork fa-stack-1x text-orange"></i>
+		</span></p>
+
+
+		<h1 class="text-purple">Kaffeebot</h1>
+
+		<p>…it’s provides an easy, quick and anonymous way to share information!</p>
+
+		<p>Want to run your own instance? Go <a href="https://github.com/koffeinsource/kaffeebot">fork me on github!</a></p>
+
+	</div>
+</div>
+
+<div id="why" class="section p-why">
+
+	<div class="subtlecircle sectiondivider faicon">
+		<span class="fa-stack">
+			<i class="fa fa-circle fa-stack-2x"></i>
+			<i class="fa fa-question fa-stack-1x"></i>
+		</span>
+		<h5 class="icon-title">Why</h5>
+	</div>
+
+	<div class="container ">
+		<h4 id="basically">Basically</h4>
+
+		<h1 id="this-theme-rocks">just import data into kaffeesahre.</h1>
+
+		<p>It's <strong><em>simple</em></strong></p>
+		<ul>
+			<li>Just put a link to an RSS feed in the form below.</li>
+			<li>And we will read the feed regularly and put its data into a kaffeeshare namespace.</li>
+		</ul>
+
+		<p>provides <strong><em>add-free access</em></strong> to information.</p>
+
+		<p>Sound good? Let’s go!</p>
+
+	</div>
+</div>
+
+<div id="details" class="section p-details">
+
+	<div class="subtlecircle sectiondivider faicon">
+		<span class="fa-stack">
+			<i class="fa fa-circle fa-stack-2x"></i>
+			<i class="fa fa-cloud-download fa-stack-1x"></i>
+		</span>
+		<h5 class="icon-title">import</h5>
+	</div>
+
+	<div class="container ">
+		<h2 id="setup-as-user-homepage">Import a RSS feed</h2>
+
+		<p>Put the RSS feed url in the form below and hit the import button.</p>
+
+		<form role="form">
+			<div id="rss-control" class="input-group">
+				<span class="input-group-btn">
+					<button id="import" class="btn btn-default" type="button">
+						Import
+					</button>
+				</span>
+				<input id="rssfeedurl" type="text" class="form-control" placeholder="RSS feed URL">
+			</div><!-- /input-group -->
+		</form>
+
+	</div>
+
+	<script type="text/javascript">
+
+	function submit() {
+		$('#import-status').html("<i class='fa fa-refresh fa-spin'></i>");
+
+		// start the request
+		request = $.ajax({
+			type: "POST",
+			url: "/kb/import/post/",
+			data: { rssurl: $('#rssfeedurl').val() },
+			dataType: 'json'
+		}).done(function( msg ) {
+			parseResult(msg);
+		}).fail(function(jqXHR, textStatus) {
+			// also called if request is aborted
+			errorStatus();
+		}).always(function( msg ) {
+		});
+
+	}
+
+	// parse the return message of namespacecheck
+	function parseResult(value) {
+		var namespace = value.namespace;
+		$('#import-status').html(generateMessage(namespace));
+	}
+
+	function generateMessage(namespace) {
+		message  ="<div id='usage' class='section p-usage'>";
+		message +="<div class='subtlecircle sectiondivider faicon'>";
+		message +="<span class='fa-stack'>";
+		message +="<i class='fa fa-circle fa-stack-2x'></i>";
+		message +="<i class='fa fa-wrench fa-stack-1x'></i>";
+		message +="</span>";
+		message +="<h5 class='icon-title'>setup</h5>";
+		message +="</div>";
+		message +="<div class='container'>";
+
+		message += "<ul>";
+		message += "<li><strong><i class='fa fa-newspaper-o'></i> <em>WWW</em></strong>";
+		message += "<div>";
+		message += "<p><strong>Address: </strong> <a href='{{.URL}}/k/show/www/" + namespace + "'>{{.URL}}/k/show/www/"+ namespace + "</a></p>";
+		message += "<p><em>Just bookmark this url to read the feed in your browser.</em></p>";
+		message += "</div>";
+		message += "</li><li><strong><i class='fa fa-rss'></i> <em>Improved RSS Feed</em></strong>";
+		message += "<div>";
+		var RSSFeedURL = "{{.URL}}/k/show/rss/" + namespace;
+		message += "<p><strong>Address: </strong> <a href='" + RSSFeedURL + "'>"+ RSSFeedURL +"</a></p>";
+		message += "</div></li></ul>";
+
+		message +="</div>";
+		message +="</div>";
+
+		return message;
+	}
+
+	function errorStatus() {
+		$('#import-status').removeClass( 'info' );
+		$('#import-status').removeClass( 'success' );
+		$('#import-status').addClass( 'error' );
+		$('#import-status').html("<div class='alert alert-info'>Error adding the feed. Please try again later!</div>");
+	}
+
+	// Import button click
+	$('#import').click(function(e) {
+		e.preventDefault();
+		submit();
+	});
+
+	// Ignore return and import
+	$('#rssfeedurl').keydown(function(event) {
+		if (event.which == 13) {
+			event.preventDefault();
+			submit();
+		}
+	});
+	</script>
+
+</div>
+
+<div id="import-status"></div>
+
+</div>
+
+{{end}}

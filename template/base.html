@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Kaffeebot</title>
+    <meta name="keywords" content="sharing">
+    <meta name="description" content="A bot that moves RSS feeds into kaffeeshare.">
+    <link href="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="/static/css/combo.css">
+    <link href='//fonts.googleapis.com/css?family=Raleway:400,300,700' rel='stylesheet' type='text/css'>
+    <link rel="stylesheet" href="//maxcdn.bootstrapcdn.com/font-awesome/4.4.0/css/font-awesome.min.css">
+
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
+    <script src="//maxcdn.bootstrapcdn.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+    <script src="//cdnjs.cloudflare.com/ajax/libs/moment.js/2.10.3/moment-with-locales.min.js"></script>
+    <script src="/static/js/kshare.js"></script>
+</head>
+<body>
+<div id="main">
+
+    <p><span id="forkongithub">
+        <a href="https://github.com/koffeinsource/kaffeebot" class="bg-blue">
+            Fork me on GitHub
+        </a>
+    </span></p>
+
+
+{{template "content" .}}
+
+</div>
+</body>
+</html>
