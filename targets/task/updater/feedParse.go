@@ -5,7 +5,6 @@ import (
 	"errors"
 	"html/template"
 	"net/http"
-	"time"
 
 	"appengine"
 
@@ -140,18 +139,15 @@ func getLinksFromFeed(dsFeed *data.Feed, r *http.Request, c appengine.Context) (
 	}
 
 	var urls []string
-	for _, i := range rss.ItemList {
-		temp, err := time.Parse(time.RFC822, i.PubDate)
-
-		if err != nil {
-			// if we could not parse the PubDate we just add it
-			urls = append(urls, i.Link)
-		} else {
-			// check if the last update was before PubDate
-			if dsFeed.LastUpdate.Before(temp) {
-				urls = append(urls, i.Link)
-			}
+	stopURL := dsFeed.LastURL
+	for index, i := range rss.ItemList {
+		if index == 0 {
+			dsFeed.LastURL = i.Link
 		}
+		if i.Link == stopURL {
+			break
+		}
+		urls = append(urls, i.Link)
 	}
 
 	return urls, nil

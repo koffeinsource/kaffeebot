@@ -10,6 +10,7 @@ type Feed struct {
 	URL        string    `json:"-" datastore:"URL,index"`
 	Namespace  string    `json:"namespace" datastore:"Namespace,noindex"`
 	LastUpdate time.Time `json:"-" datastore:"LastUpdate,index"`
+	LastURL    string    `json:"-" datastore:"LastURL,noindex"`
 	Fails      int       `json:"-" datastore:"Fails,index"`
 }
 
